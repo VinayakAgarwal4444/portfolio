@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinayak Agarwal — AI &amp; data engineering</title>
+<meta name="description" content="Vinayak Agarwal is an AI master's graduate working in Melbourne on machine learning, data engineering and full-stack systems.">
+<meta name="author" content="Vinayak Agarwal">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vinayak Agarwal — AI &amp; data engineering">
+<meta property="og:description" content="Machine learning, data engineering and full-stack systems. Melbourne, Australia.">
+<meta property="og:url" content="https://vinayak-agarwal.uk">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23191A2B'/%3E%3Cpath d='M6 24 L12 24 L12 16 L20 16 L20 8 L26 8' stroke='%23C8385C' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F2F0EB;
+  --paper-deep:#E7E4DC;
+  --ink:#191A2B;
+  --ink-soft:#4A4B5E;
+  --mist:#C5C1B6;
+  --indigo:#35357A;
+  --signal:#C8385C;
+  --pine:#2B6152;
+
+  --measure:64ch;
+  --gutter:clamp(1.25rem, 5vw, 4rem);
+
+  --step--1:clamp(.82rem,.79rem + .14vw,.9rem);
+  --step-0:clamp(1rem,.96rem + .2vw,1.1rem);
+  --step-1:clamp(1.2rem,1.12rem + .4vw,1.45rem);
+  --step-2:clamp(1.5rem,1.32rem + .9vw,2.1rem);
+  --step-3:clamp(2.1rem,1.6rem + 2.5vw,3.6rem);
+  --step-4:clamp(2.8rem,1.7rem + 5.4vw,6rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;
+  font-size:var(--step-0);
+  line-height:1.6;
+  font-synthesis-weight:none;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+:focus-visible{
+  outline:2px solid var(--signal);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+.skip{
+  position:absolute;left:-9999px;top:0;
+  background:var(--ink);color:var(--paper);
+  padding:.6rem 1rem;z-index:50;
+}
+.skip:focus{left:.5rem;top:.5rem}
+
+.wrap{
+  width:min(100% - calc(var(--gutter) * 2), 1180px);
+  margin-inline:auto;
+}
+
+/* ---------- hero ---------- */
+
+.hero{
+  position:relative;
+  background:var(--ink);
+  color:var(--paper);
+  overflow:hidden;
+  isolation:isolate;
+}
+#grid{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+.hero-inner{
+  position:relative;
+  z-index:1;
+  padding-block:clamp(4.5rem,16vh,9rem) clamp(3rem,9vh,5.5rem);
+}
+.hero h1{
+  font-family:"Fraunces",Georgia,serif;
+  font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 120;
+  font-weight:600;
+  font-size:var(--step-4);
+  line-height:.95;
+  letter-spacing:-.02em;
+  margin:0;
+  max-width:13ch;
+}
+.hero p{
+  font-size:var(--step-1);
+  line-height:1.45;
+  color:#CFCEDC;
+  max-width:36ch;
+  margin:1.6rem 0 0;
+}
+.hero-meta{
+  margin-top:2.6rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem 1.4rem;
+  font-size:var(--step--1);
+  color:#9B9AB0;
+}
+.hero-links{
+  margin-top:1.4rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.7rem;
+}
+.btn{
+  display:inline-block;
+  padding:.7rem 1.3rem;
+  text-decoration:none;
+  font-weight:500;
+  font-size:var(--step--1);
+  border:1px solid #43445E;
+  color:var(--paper);
+  transition:background-color .18s ease,border-color .18s ease;
+}
+.btn:hover{background:#22243A;border-color:#6B6C88}
+.btn-lead{
+  background:var(--signal);
+  border-color:var(--signal);
+  color:#fff;
+}
+.btn-lead:hover{background:#A92B4B;border-color:#A92B4B}
+
+.hero-note{
+  position:relative;
+  z-index:1;
+  border-top:1px solid #2B2D45;
+  padding-block:.9rem;
+  font-size:.78rem;
+  color:#74748C;
+  letter-spacing:.01em;
+}
+
+/* ---------- sections ---------- */
+
+main{padding-bottom:1rem}
+
+.section{
+  padding-block:clamp(3.5rem,9vh,6rem);
+  border-bottom:1px solid var(--paper-deep);
+}
+.section:last-of-type{border-bottom:0}
+
+.section-head{
+  display:grid;
+  gap:.4rem;
+  margin-bottom:2.6rem;
+}
+.section-head h2{
+  font-family:"Fraunces",Georgia,serif;
+  font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 60;
+  font-weight:600;
+  font-size:var(--step-2);
+  letter-spacing:-.015em;
+  line-height:1.1;
+  margin:0;
+}
+.section-head p{
+  margin:0;
+  color:var(--ink-soft);
+  max-width:52ch;
+  font-size:var(--step--1);
+}
+
+.lede{
+  font-family:"Fraunces",Georgia,serif;
+  font-variation-settings:"SOFT" 0,"WONK" 0,"opsz" 40;
+  font-size:var(--step-1);
+  line-height:1.55;
+  max-width:var(--measure);
+  margin:0 0 1.4rem;
+}
+.lede + p{max-width:var(--measure);color:var(--ink-soft);margin:0 0 1rem}
+
+/* ---------- work timeline ---------- */
+
+.track{
+  list-style:none;
+  margin:0;
+  padding:0;
+  position:relative;
+}
+.track::before{
+  content:"";
+  position:absolute;
+  left:5px;
+  top:.7rem;
+  bottom:.7rem;
+  width:1px;
+  background:var(--mist);
+}
+.role{
+  position:relative;
+  padding-left:2.4rem;
+  padding-bottom:2.8rem;
+}
+.role:last-child{padding-bottom:0}
+.role::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.62rem;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--paper);
+  border:2px solid var(--indigo);
+}
+.role.now::before{background:var(--signal);border-color:var(--signal)}
+
+.role h3{
+  margin:0;
+  font-size:var(--step-1);
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+.role .org{
+  color:var(--indigo);
+  font-weight:500;
+}
+.role .when{
+  margin:.2rem 0 .9rem;
+  font-size:var(--step--1);
+  color:var(--ink-soft);
+}
+.role ul{
+  margin:0;
+  padding-left:1.1rem;
+  max-width:var(--measure);
+}
+.role li{margin-bottom:.5rem}
+.role li::marker{color:var(--mist)}
+b{font-weight:600}
+
+/* ---------- projects ---------- */
+
+.featured{
+  display:grid;
+  gap:2.2rem;
+  margin-bottom:3.2rem;
+}
+@media (min-width:820px){
+  .featured{grid-template-columns:1fr 1fr;gap:2.8rem}
+}
+.feat{
+  border-top:2px solid var(--ink);
+  padding-top:1.2rem;
+}
+.feat h3{
+  margin:0 0 .2rem;
+  font-size:var(--step-1);
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+.feat .when{font-size:var(--step--1);color:var(--ink-soft);margin:0 0 .9rem}
+.feat p{margin:0 0 1rem;max-width:52ch}
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  margin:0 0 1rem;
+  padding:0;
+  list-style:none;
+}
+.tags li{
+  font-size:.76rem;
+  letter-spacing:.02em;
+  padding:.22rem .55rem;
+  border:1px solid var(--mist);
+  color:var(--ink-soft);
+}
+.out{
+  font-size:var(--step--1);
+  font-weight:500;
+  color:var(--indigo);
+  text-decoration:none;
+  border-bottom:1px solid var(--mist);
+  padding-bottom:1px;
+}
+.out:hover{color:var(--signal);border-color:var(--signal)}
+
+.more{
+  list-style:none;
+  margin:0;
+  padding:0;
+  border-top:1px solid var(--paper-deep);
+}
+.more li{
+  border-bottom:1px solid var(--paper-deep);
+  padding:1.15rem 0;
+  display:grid;
+  gap:.3rem;
+}
+@media (min-width:760px){
+  .more li{
+    grid-template-columns:minmax(0,15rem) minmax(0,1fr) auto;
+    gap:1.6rem;
+    align-items:baseline;
+  }
+}
+.more h4{
+  margin:0;
+  font-size:var(--step-0);
+  font-weight:600;
+}
+.more p{margin:0;color:var(--ink-soft);font-size:var(--step--1);max-width:60ch}
+.more .when{color:var(--mist);font-size:.78rem;white-space:nowrap}
+
+/* ---------- skills ---------- */
+
+.skills{
+  display:grid;
+  gap:1.8rem;
+}
+@media (min-width:720px){
+  .skills{grid-template-columns:repeat(2,1fr);gap:2rem 3rem}
+}
+.skill h3{
+  margin:0 0 .55rem;
+  font-size:var(--step-0);
+  font-weight:600;
+  padding-bottom:.4rem;
+  border-bottom:1px solid var(--mist);
+}
+.skill p{margin:0;color:var(--ink-soft);font-size:var(--step--1);line-height:1.65}
+
+/* ---------- education ---------- */
+
+.edu{
+  display:grid;
+  gap:2rem;
+}
+@media (min-width:760px){
+  .edu{grid-template-columns:1fr 1fr;gap:3rem}
+}
+.edu h3{margin:0;font-size:var(--step-1);font-weight:600;letter-spacing:-.01em}
+.edu .deg{margin:.15rem 0 .1rem;color:var(--indigo);font-weight:500}
+.edu .when{margin:0 0 .9rem;font-size:var(--step--1);color:var(--ink-soft)}
+.edu ul{margin:0;padding-left:1.1rem}
+.edu li{margin-bottom:.45rem;font-size:var(--step--1);color:var(--ink-soft)}
+.edu li::marker{color:var(--mist)}
+.edu strong{color:var(--ink);font-weight:600}
+
+/* ---------- contact ---------- */
+
+.contact{
+  background:var(--ink);
+  color:var(--paper);
+  padding-block:clamp(3.5rem,9vh,6rem);
+}
+.contact h2{
+  font-family:"Fraunces",Georgia,serif;
+  font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 90;
+  font-weight:600;
+  font-size:var(--step-3);
+  line-height:1.05;
+  letter-spacing:-.02em;
+  margin:0 0 1rem;
+  max-width:16ch;
+}
+.contact p{color:#B6B5C6;max-width:46ch;margin:0 0 2rem}
+.contact .hero-links{margin-top:0}
+footer{
+  background:var(--ink);
+  color:#5F5F78;
+  font-size:.78rem;
+  padding-bottom:2.5rem;
+}
+footer .wrap{
+  border-top:1px solid #2B2D45;
+  padding-top:1.2rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem 1.5rem;
+  justify-content:space-between;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero">
+  <canvas id="grid" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <h1>Vinayak Agarwal</h1>
+    <p>I build machine learning systems and the data plumbing that keeps them honest.</p>
+
+    <div class="hero-meta">
+      <span>Melbourne, Australia</span>
+      <span>MS Artificial Intelligence, Monash</span>
+      <span>Open to AI and data roles</span>
+    </div>
+
+    <div class="hero-links">
+      <a class="btn btn-lead" href="mailto:vinayakragarwal@gmail.com">Email me</a>
+      <a class="btn" href="https://www.linkedin.com/in/vinayak-agarwal-public/" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MonashDeepNeuron/the_0-1_knapsack_problem" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="wrap hero-note">
+    Above: three agents solving a shared grid with A* and safe-interval planning, the problem behind my railway scheduling work.
+    &nbsp;·&nbsp; <a href="/phone-server" style="color:#CFCEDC">This page is served from an Android phone</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section wrap" aria-labelledby="about-h">
+    <div class="section-head">
+      <h2 id="about-h">What I do</h2>
+    </div>
+    <p class="lede">I finished a master's in AI at Monash in 2025, after an electronics and economics degree at BITS Pilani. Most of my work sits where models meet production: getting data clean enough to trust, getting a model to behave under real conditions, and getting the result in front of someone who can act on it.</p>
+    <p>Before Monash I spent six months at UBS automating the data work behind Federal Reserve stress testing, and six months at Blue Yonder rebuilding supply chain data models. I am currently at Telstra doing root cause analysis on NBN network faults, which has turned out to be a very good school for debugging systems you cannot see.</p>
+  </section>
+
+  <section class="section wrap" aria-labelledby="work-h">
+    <div class="section-head">
+      <h2 id="work-h">Work</h2>
+    </div>
+
+    <ol class="track">
+      <li class="role now">
+        <h3>NBN front of house associate, <span class="org">Telstra</span></h3>
+        <p class="when">Melbourne, Australia &nbsp;·&nbsp; Oct 2025 to now</p>
+        <ul>
+          <li>Hold a <b>79% first resolution rate</b> on complex NBN connectivity failures, 15 points above the Melbourne team average.</li>
+          <li>Cut level 2 engineering escalations by <b>10%</b> through root cause analysis across FTTP, FTTN, FTTC and HFC architectures.</li>
+        </ul>
+      </li>
+
+      <li class="role">
+        <h3>Asset management intern, <span class="org">UBS</span></h3>
+        <p class="when">Mumbai, India &nbsp;·&nbsp; Jan 2023 to Jun 2023</p>
+        <ul>
+          <li>Automated <b>85%</b> of manual financial data processing in Python and R, cutting turnaround on Federal Reserve CCAR stress testing cycles.</li>
+          <li>Built machine learning driven statistical models that back-tested at <b>98% accuracy</b> against high volatility historical macroeconomic scenarios.</li>
+          <li>Wrote 50+ pages of model validation documentation, accepted by an external review board.</li>
+        </ul>
+      </li>
+
+      <li class="role">
+        <h3>Software intern, <span class="org">Blue Yonder</span></h3>
+        <p class="when">Bangalore, India &nbsp;·&nbsp; Jun 2022 to Dec 2022</p>
+        <ul>
+          <li>Led engineering of <b>3NF logical models</b> for complex datasets, removing redundancy across 50,000+ unique records.</li>
+          <li>Optimised SQL databases on Oracle Cloud, reducing <b>query latency by 40%</b> for supply chain business intelligence applications.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section wrap" aria-labelledby="proj-h">
+    <div class="section-head">
+      <h2 id="proj-h">Projects</h2>
+      <p>Two I would happily talk through for an hour, and the rest of the coursework and research that got me there.</p>
+    </div>
+
+    <div class="featured">
+      <article class="feat">
+        <h3>Connectable</h3>
+        <p class="when">Postgraduate capstone &nbsp;·&nbsp; Mar to May 2025</p>
+        <p>A full-stack web application built with industry stakeholders from Coles and Flybuys. I was a main point of contact with the client team, taking feedback into each iteration so the thing we shipped matched what they actually needed rather than what we assumed in week one.</p>
+        <ul class="tags">
+          <li>Flask</li><li>Vue.js</li><li>Gemini API</li><li>Prompt engineering</li><li>AWS</li><li>Agile</li>
+        </ul>
+        <a class="out" href="https://eportfolio.monash.edu/view/view.php?t=94bc3236ead61f428aac" rel="noopener">Read the project portfolio</a>
+      </article>
+
+      <article class="feat">
+        <h3>Multi-agent path planning for railway networks</h3>
+        <p class="when">Research project &nbsp;·&nbsp; Jul to Nov 2024</p>
+        <p>Trains sharing track cannot simply take the shortest route each. I implemented A* with a Manhattan heuristic for the single agent case, then safe interval path planning and prioritised planning to coordinate many agents through dynamic obstacles, timing constraints and malfunctions. Priority-based search and large neighbourhood search handled conflict resolution at scale.</p>
+        <ul class="tags">
+          <li>A* search</li><li>SIPP</li><li>Prioritised planning</li><li>PBS</li><li>LNS</li>
+        </ul>
+      </article>
+    </div>
+
+    <ul class="more">
+      <li>
+        <h4>Deep Q-learning for grid navigation</h4>
+        <p>A DQN agent for pick-and-deliver tasks in a changing grid, with experience replay and epsilon-greedy exploration driving policy convergence.</p>
+        <span class="when">Jul to Nov 2024</span>
+      </li>
+      <li>
+        <h4>Cooperative multi-agent RL</h4>
+        <p>A multi-agent Q-learning framework for transport tasks that require agents to exchange information, evaluated with game-theoretic analysis and deep Q-networks.</p>
+        <span class="when">Jul to Nov 2024</span>
+      </li>
+      <li>
+        <h4>Relational and non-relational database design</h4>
+        <p>Healthcare data normalised to 3NF, logical models built in Oracle Data Modeler and implemented in Oracle DB, plus MongoDB conversion and querying.</p>
+        <span class="when">Jul to Nov 2023</span>
+      </li>
+      <li>
+        <h4>Document clustering with EM</h4>
+        <p>Soft-EM and hard-EM clustering visualised through PCA, alongside perceptrons and neural nets trained for binary classification with decision boundaries plotted.</p>
+        <span class="when">Feb to Jun 2024</span>
+      </li>
+      <li>
+        <h4>CNN techniques and adversarial robustness</h4>
+        <p>A modular PyTorch CNN with batch norm, dropout and skip connections, tested against adversarial attacks with Mixup and CutMix augmentation.</p>
+        <span class="when">Feb to Jun 2024</span>
+      </li>
+      <li>
+        <h4>Parallel 0/1 knapsack</h4>
+        <p>The knapsack algorithm in C at minimal space and time complexity, parallelised with OpenMP. <a class="out" href="https://github.com/MonashDeepNeuron/the_0-1_knapsack_problem" rel="noopener">Code on GitHub</a></p>
+        <span class="when">Sep 2023</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="section wrap" aria-labelledby="skills-h">
+    <div class="section-head">
+      <h2 id="skills-h">Tools and strengths</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h3>Data analysis and business intelligence</h3>
+        <p>SQL, Python with Pandas, NumPy and PySpark, R, advanced Excel including pivot tables, Power BI, statistical modelling, data cleansing and ingestion.</p>
+      </div>
+      <div class="skill">
+        <h3>Databases and data management</h3>
+        <p>SQL database design on Oracle DB, MongoDB, data modelling and normalisation, data governance.</p>
+      </div>
+      <div class="skill">
+        <h3>Cloud and delivery</h3>
+        <p>AWS, GCP, Flask, CI/CD, Git, OpenMP.</p>
+      </div>
+      <div class="skill">
+        <h3>How I work</h3>
+        <p>Root cause analysis, stakeholder communication, project delivery and process improvement. Comfortable running my own work and comfortable in a team.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="edu-h">
+    <div class="section-head">
+      <h2 id="edu-h">Education</h2>
+    </div>
+    <div class="edu">
+      <div>
+        <h3>Monash University</h3>
+        <p class="deg">MS Artificial Intelligence</p>
+        <p class="when">Clayton, VIC, Australia &nbsp;·&nbsp; Jul 2023 to Jul 2025</p>
+        <ul>
+          <li>Graduated with <strong>Distinction</strong>, WAM 78.75</li>
+          <li>Monash DeepNeuron member and Monash Graduate Association volunteer</li>
+          <li>Deep learning, machine learning, natural language processing, software algorithms, project management</li>
+        </ul>
+      </div>
+      <div>
+        <h3>BITS Pilani, K. K. Birla Goa Campus</h3>
+        <p class="deg">BE Electronics and Instrumentation with MS Economics</p>
+        <p class="when">Goa, India &nbsp;·&nbsp; Jul 2018 to Jun 2023</p>
+        <ul>
+          <li>Graduated in <strong>First Class</strong>, WAM 73</li>
+          <li>Student Faculty Council member for marketing research</li>
+          <li>Mathematical and statistical methods, applied econometrics, business analysis and valuation, financial management</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<section class="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <h2 id="contact-h">Tell me what you are building</h2>
+    <p>I am open to AI, machine learning and data engineering roles in Australia, and happy to talk through any of the work above.</p>
+    <div class="hero-links">
+      <a class="btn btn-lead" href="mailto:vinayakragarwal@gmail.com">vinayakragarwal@gmail.com</a>
+      <a class="btn" href="https://www.linkedin.com/in/vinayak-agarwal-public/" rel="noopener">Connect on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Vinayak Agarwal, Melbourne</span>
+    <a href="/phone-server" style="color:#8A8AA4">Served from a phone in my living room</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('grid');
+  if(!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+
+  var COLS = 0, ROWS = 0, CELL = 34;
+  var walls = [], agents = [], dpr = 1;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var COLORS = ['#C8385C', '#5B7CE0', '#3F8F78'];
+
+  function size(){
+    var r = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.floor(r.width * dpr));
+    canvas.height = Math.max(1, Math.floor(r.height * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    CELL = r.width < 600 ? 26 : 34;
+    COLS = Math.ceil(r.width / CELL) + 1;
+    ROWS = Math.ceil(r.height / CELL) + 1;
+  }
+
+  function key(x, y){ return x + ',' + y; }
+
+  function buildMaze(){
+    walls = {};
+    var density = 0.16;
+    for(var y = 0; y < ROWS; y++){
+      for(var x = 0; x < COLS; x++){
+        if(Math.random() < density) walls[key(x,y)] = true;
+      }
+    }
+  }
+
+  // A* on a 4-connected grid
+  function astar(sx, sy, gx, gy){
+    var open = [{x:sx, y:sy, g:0, f:Math.abs(gx-sx)+Math.abs(gy-sy), p:null}];
+    var seen = {};
+    seen[key(sx,sy)] = 0;
+    var guard = 0;
+
+    while(open.length && guard++ < 9000){
+      var bi = 0;
+      for(var i = 1; i < open.length; i++){ if(open[i].f < open[bi].f) bi = i; }
+      var cur = open.splice(bi, 1)[0];
+
+      if(cur.x === gx && cur.y === gy){
+        var path = [], n = cur;
+        while(n){ path.push({x:n.x, y:n.y}); n = n.p; }
+        return path.reverse();
+      }
+
+      var nb = [[1,0],[-1,0],[0,1],[0,-1]];
+      for(var j = 0; j < 4; j++){
+        var nx = cur.x + nb[j][0], ny = cur.y + nb[j][1];
+        if(nx < 0 || ny < 0 || nx >= COLS || ny >= ROWS) continue;
+        if(walls[key(nx,ny)]) continue;
+        var ng = cur.g + 1, k = key(nx,ny);
+        if(seen[k] !== undefined && seen[k] <= ng) continue;
+        seen[k] = ng;
+        open.push({x:nx, y:ny, g:ng, f:ng + Math.abs(gx-nx) + Math.abs(gy-ny), p:cur});
+      }
+    }
+    return null;
+  }
+
+  function seed(){
+    buildMaze();
+    agents = [];
+    var tries = 0;
+    while(agents.length < 3 && tries++ < 40){
+      var sy = Math.floor(Math.random() * ROWS);
+      var gy = Math.floor(Math.random() * ROWS);
+      walls[key(0,sy)] = false;
+      walls[key(COLS-1,gy)] = false;
+      var p = astar(0, sy, COLS-1, gy);
+      if(p && p.length > COLS){
+        agents.push({path:p, head:0, color:COLORS[agents.length]});
+      }
+    }
+    if(!agents.length){ buildMaze(); }
+  }
+
+  function drawLattice(){
+    ctx.fillStyle = 'rgba(242,240,235,0.09)';
+    for(var y = 0; y < ROWS; y++){
+      for(var x = 0; x < COLS; x++){
+        if(walls[key(x,y)]) continue;
+        ctx.fillRect(x*CELL + CELL/2 - 1, y*CELL + CELL/2 - 1, 2, 2);
+      }
+    }
+    ctx.fillStyle = 'rgba(242,240,235,0.035)';
+    for(var k in walls){
+      if(!walls[k]) continue;
+      var parts = k.split(','), px = +parts[0], py = +parts[1];
+      ctx.fillRect(px*CELL + 5, py*CELL + 5, CELL - 10, CELL - 10);
+    }
+  }
+
+  function drawAgents(){
+    for(var a = 0; a < agents.length; a++){
+      var ag = agents[a];
+      var upto = Math.min(ag.head, ag.path.length - 1);
+      if(upto < 1) continue;
+
+      ctx.strokeStyle = ag.color;
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      for(var i = 0; i <= upto; i++){
+        var cx = ag.path[i].x*CELL + CELL/2;
+        var cy = ag.path[i].y*CELL + CELL/2;
+        if(i === 0) ctx.moveTo(cx, cy); else ctx.lineTo(cx, cy);
+      }
+      ctx.stroke();
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = ag.color;
+      ctx.beginPath();
+      ctx.arc(ag.path[upto].x*CELL + CELL/2, ag.path[upto].y*CELL + CELL/2, 3.5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  var last = 0, step = 55, done = 0;
+
+  function frame(t){
+    if(!last) last = t;
+    if(t - last > step){
+      last = t;
+      var moving = false;
+      for(var a = 0; a < agents.length; a++){
+        if(agents[a].head < agents[a].path.length - 1){
+          agents[a].head++;
+          moving = true;
+        }
+      }
+      if(!moving){
+        done += step;
+        if(done > 4200){ done = 0; seed(); }
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawLattice();
+      drawAgents();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function still(){
+    seed();
+    for(var a = 0; a < agents.length; a++){ agents[a].head = agents[a].path.length - 1; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawLattice();
+    drawAgents();
+  }
+
+  size();
+  if(reduced){
+    still();
+  } else {
+    seed();
+    requestAnimationFrame(frame);
+  }
+
+  var rt;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      size();
+      if(reduced){ still(); } else { seed(); last = 0; done = 0; }
+    }, 200);
+  });
+})();
+</script>
+</body>
+</html>
