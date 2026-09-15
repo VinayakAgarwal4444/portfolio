@@ -10,7 +10,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS requests (
   status INTEGER, bytes INTEGER, resp_time REAL, ua TEXT, referer TEXT,
   UNIQUE(ts, ip_hash, path))""")
 
-SALT = "change-this-to-anything"
+SALT = os.environ.get("IP_SALT", "dev-only")
 
 def anon(ip):
     return hashlib.sha256((SALT + (ip or "")).encode()).hexdigest()[:12]

@@ -440,15 +440,21 @@ cloudflared tunnel route dns phone-site vinayak-agarwal.uk</pre>
       </li>
 
       <li class="stage">
-        <h3>Surviving reboots and Android itself</h3>
-        <p class="dim">This is the stage that separates a demo from a server. Android aggressively dozes background processes, and Termux is background the moment the screen turns off. <code>termux-wake-lock</code> is what stops the site going dark at three in the morning.</p>
-        <p class="dim">Termux:Boot runs anything in <code>~/.termux/boot/</code> at startup:</p>
-<pre><span class="c">#!/data/data/com.termux/files/usr/bin/sh</span>
-termux-wake-lock
-sshd
-nginx
-cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;</pre>
-        <p class="dim">Battery optimisation also has to be disabled for Termux in Android settings. Without it, the boot script runs and then the OS quietly reaps everything twenty minutes later.</p>
+        <h3>Surviving Android itself</h3>
+        <p class="dim">This is the stage that separates a demo from a server, and it took longer than everything above it combined. Android dozes background processes, and Termux is background the moment the screen turns off. <code>termux-wake-lock</code> is what stops the site going dark at three in the morning.</p>
+        <p class="dim">The documented answer is Termux:Boot, which runs anything in <code>~/.termux/boot/</code> at startup. On this handset it never fires at all, for reasons covered below, so process supervision had to come from somewhere else.</p>
+        <p class="dim">What actually works is a watchdog on a cron schedule. Every five minutes it checks each service and restarts what is missing, logging every intervention:</p>
+<pre><span class="c">*/5 * * * * $HOME/watchdog.sh</span>
+<span class="c"># and inside watchdog.sh:</span>
+alive=0
+[ -f "$PIDFILE" ] &amp;&amp; kill -0 "$(cat $PIDFILE)" 2&gt;/dev/null &amp;&amp; alive=1
+
+<span class="k">if</span> [ "$alive" -eq 0 ]; <span class="k">then</span>
+  echo "$(date '+%F %T') restarting tunnel" &gt;&gt; $LOG
+  nohup cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;
+  echo $! &gt; "$PIDFILE"
+<span class="k">fi</span></pre>
+        <p class="dim">Writing the PID to a file and testing it with <code>kill -0</code> is deliberate. Signal zero sends nothing and only asks whether the process exists, which turned out to be the one liveness check on this platform I could trust. Reboots are handled separately by a Termux:Widget shortcut on the home screen, and the watchdog restores <code>crond</code> itself so each mechanism covers the other's gap.</p>
       </li>
 
     </ol>
@@ -459,6 +465,33 @@ cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;</p
     <p class="dim">The tutorial version of this project is forty minutes. The real version was not, and the gap between them is the interesting part.</p>
 
     <ul class="breaks">
+      <li class="brk">
+        <h3>A watchdog that could never fire</h3>
+        <span class="err">pgrep -f "cloudflared tunnel run"  →  exit 0, with the tunnel dead</span>
+        <p class="dim">The watchdog checked whether the tunnel was alive before restarting it. The check passed every single time, including when nothing was running, so the restart branch was unreachable and the watchdog had never once done its job. The reason is that <code>pgrep -f</code> scans full command lines, and the string it was searching for was sitting in its own command line. It was finding itself.</p>
+        <p class="dim">The obvious fix made it worse. <code>pgrep -x cloudflared</code> returns nothing for a process <code>ps</code> lists plainly, so the two tools disagreed about reality. I only found the real state by cross-checking them against each other. Both flags were unusable, which is why the working version tracks a PID it wrote down itself rather than asking the system to find one.</p>
+      </li>
+
+      <li class="brk">
+        <h3>Nine tunnels to the same hostname</h3>
+        <span class="err">ps aux | grep cloudflared  →  9 live processes, 45MB each</span>
+        <p class="dim">While the liveness check was broken, a cron entry had been launching a fresh tunnel every five minutes. Cloudflare load balances across duplicate connections, so nothing looked wrong from outside. The site stayed up, quietly consuming 400MB on a device with four gigabytes.</p>
+        <p class="dim">Two lessons. A guard that silently fails open produces a worse failure than no guard at all, because the symptom is resource exhaustion hours later rather than an error at the point of the mistake. And putting shell logic directly in a crontab line is a bad idea: the backgrounding operator interacted with the conditional in a way that never short-circuited. All the logic now lives in a script where the shell behaves predictably.</p>
+      </li>
+
+      <li class="brk">
+        <h3>A boot broadcast that never arrives</h3>
+        <p class="dim">The whole startup design rested on Termux:Boot running a script at power-on. It never ran a single line of it. Not a permissions problem, not line endings, not battery optimisation. The manufacturer's Android layer simply does not deliver the boot broadcast to the app on this handset, and no combination of settings changed that.</p>
+        <p class="dim">The diagnostic that settled it was one line writing a timestamp to a file as the very first thing the script did. An empty file distinguishes "never ran" from "ran and was killed", and those two have completely different fixes. I had been treating them as the same problem for some time.</p>
+      </li>
+
+      <li class="brk">
+        <h3>A redirect that downgraded HTTPS</h3>
+        <span class="err">Location: http://vinayak-agarwal.uk:8080/phone-server/</span>
+        <p class="dim">Requesting a directory without a trailing slash makes nginx redirect to add one, and it built that redirect from its own listening port rather than the hostname the request arrived with. Visitors got bounced from the tunnel onto plain HTTP on a port that is not publicly reachable, with a browser warning attached.</p>
+        <p class="dim">The fix is <code>absolute_redirect off</code>, which emits a relative <code>Location</code> so the browser keeps the scheme and host it already had. This is a general hazard of terminating TLS somewhere other than the origin: the origin does not know how it is being reached, so any URL it constructs from its own configuration will be wrong.</p>
+      </li>
+
       <li class="brk">
         <h3>A placeholder that looked like a path</h3>
         <span class="err">Tunnel credentials file '.../&lt;TUNNEL-ID&gt;.json' doesn't exist or is not a file</span>
@@ -472,14 +505,15 @@ cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;</p
       </li>
 
       <li class="brk">
-        <h3>Windows does not ship rsync</h3>
-        <span class="err">'rsync' is not recognized as an internal or external command</span>
-        <p class="dim">Every guide assumes a Unix client. The built-in OpenSSH client on Windows covers <code>ssh</code> and <code>scp</code> but nothing else, and for a single static file scp is the right tool anyway.</p>
+        <h3>Everything tied to a session dies with it</h3>
+        <p class="dim">I hit this twice. First with the tunnel running in the foreground, where closing the laptop lid took the website down even though nothing on the phone had crashed. Then again with a status endpoint driven by a <code>while true</code> loop started by hand, which stopped writing the moment that shell ended and left a JSON file on the site quietly reporting fifteen hour old numbers as if they were current.</p>
+        <p class="dim">The second one is the more dangerous shape of the bug, because a stale endpoint looks healthy. Anything expected to outlive a terminal now runs from cron, which restarts after crashes and does not care whether anyone is logged in.</p>
       </li>
 
       <li class="brk">
-        <h3>The tunnel dies with the terminal</h3>
-        <p class="dim">Running the tunnel in the foreground ties it to the SSH session. Close the laptop lid and the website goes down, which is a confusing failure because nothing on the phone actually crashed. Backgrounding it with <code>nohup</code> and holding a wake lock fixes it properly.</p>
+        <h3>Windows does not ship rsync</h3>
+        <span class="err">'rsync' is not recognized as an internal or external command</span>
+        <p class="dim">Every guide assumes a Unix client. The built-in OpenSSH client on Windows covers <code>ssh</code> and <code>scp</code> but nothing else, and for a single static file scp is the right tool anyway.</p>
       </li>
     </ul>
   </section>
@@ -519,7 +553,8 @@ cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;</p
     <h2 id="limits">Honest limitations</h2>
     <ul class="plain dim">
       <li>Keeping a lithium battery pinned at 100% degrades it. On a phone I was not using this is an acceptable trade, but it is a real cost rather than a free lunch.</li>
-      <li>Android will still kill Termux under memory pressure. The wake lock and the battery optimisation exemption make it rare, not impossible.</li>
+      <li>Android will still kill Termux under memory pressure. The wake lock and the watchdog make recovery automatic, not unnecessary.</li>
+      <li>Recent Android versions deny unprivileged reads of <code>/proc/loadavg</code> and <code>/proc/meminfo</code>, so the usual system metrics are unavailable. Monitoring here measures service behaviour instead: local response time, free disk, round trip latency to the edge.</li>
       <li>Residential upstream bandwidth is the ceiling. Static files behind a caching edge make that a non-issue here, and would not survive anything heavier.</li>
       <li>This is a single point of failure sitting on a shelf. It is a demonstration, not an argument for hosting production systems this way.</li>
     </ul>
@@ -529,7 +564,8 @@ cloudflared tunnel run phone-site &gt;&gt; $HOME/tunnel.log 2&gt;&amp;1 &amp;</p
     <h2 id="took">What I took from it</h2>
     <p>Most of my background is in models and data pipelines, where the infrastructure is something another team owns. Building this end to end put me on the other side of that boundary, and a few things stuck.</p>
     <p class="dim">Constraints produce better designs than freedom does. I could not open a port, so I learned how outbound tunnelling works, and the result is more secure than the approach I would have taken with no restrictions at all. The privileged port limit forced the same kind of thinking one layer down.</p>
-    <p class="dim">It also rhymes more than I expected with the network fault work I do day to day. Both are exercises in reasoning about a system you cannot see directly, working out which layer failed from the shape of the symptom. A 502 through the tunnel means cloudflared is fine and nginx is not. That is the same deduction as isolating a fault to the last mile rather than the exchange.</p>
+    <p class="dim">The harder lesson was that a check which silently passes is worse than no check. The broken watchdog and the frozen status endpoint were the same failure wearing different clothes: both reported health while doing nothing, and both went unnoticed for hours because the signal I was reading was the thing that had failed. Anything that monitors now records what it did, with a timestamp, so absence of activity is visible rather than indistinguishable from stability.</p>
+    <p class="dim">It also rhymes more than I expected with the network fault work I do day to day. Both are exercises in reasoning about a system you cannot see directly, working out which layer failed from the shape of the symptom. A 502 through the tunnel means cloudflared is fine and nginx is not. That is the same deduction as isolating a fault to the last mile rather than the exchange, and in both cases the instrument is sometimes the thing that is lying to you.</p>
   </section>
 
 </main>
