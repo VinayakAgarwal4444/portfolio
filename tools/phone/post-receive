@@ -1,0 +1,15 @@
+#!/data/data/com.termux/files/usr/bin/sh
+REPO=$HOME/portfolio.git
+TMP=$HOME/.deploy-tmp
+TARGET=$HOME/www
+
+rm -rf "$TMP" && mkdir -p "$TMP"
+git --work-tree="$TMP" --git-dir="$REPO" checkout -f main
+
+rm -rf "$TARGET"/*
+cp -r "$TMP"/site/* "$TARGET"/
+mkdir -p "$TARGET"/data
+cp $HOME/portfolio-data/*.json "$TARGET"/ 2>/dev/null
+rm -rf "$TMP"
+
+echo "--> deployed $(date)"
