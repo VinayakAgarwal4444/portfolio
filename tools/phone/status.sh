@@ -51,3 +51,5 @@ EOF
 
 # Atomic swap so nginx never serves a half-written file.
 mv "$TMP" "$OUT"
+
+cp $HOME/portfolio-data/status.json $HOME/www/status.json 2>/dev/null
